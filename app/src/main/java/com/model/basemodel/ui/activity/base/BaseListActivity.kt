@@ -4,6 +4,8 @@ import `in`.srain.cube.views.ptr.PtrClassicFrameLayout
 import `in`.srain.cube.views.ptr.PtrDefaultHandler2
 import `in`.srain.cube.views.ptr.PtrFrameLayout
 import `in`.srain.cube.views.ptr.header.StoreHouseHeader
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -18,6 +20,7 @@ import android.widget.Toast
 import com.jaeger.library.StatusBarUtil
 import com.model.basemodel.R
 import com.model.basemodel.ui.activity.base.IBase
+import com.model.basemodel.util.PermissionHelper
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.api.RefreshLayout
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
@@ -151,6 +154,39 @@ abstract class BaseListActivity : IBase, AppCompatActivity(), AnkoLogger {
     fun hideEmptylayout() {
         empty_layout.visibility = View.GONE
     }
+    private var mAlertDialog: AlertDialog? = null
+    /**
+     * 请求权限
+     *
+     *
+     * 如果权限被拒绝过，则提示用户需要权限
+     */
+    fun requestPermission(permission: String, rationale: String, requestCode: Int) {
+        showAlertDialog(getString(R.string.internal_storage_permissions), rationale,
+            DialogInterface.OnClickListener { dialog, which ->  PermissionHelper.requestPermission(this,requestCode,arrayOf(permission)); }, getString(R.string.ensure), null, getString(R.string.cancel))
+    }
 
+    /**
+     * 显示指定标题和信息的对话框
+     *
+     * @param title                         - 标题
+     * @param message                       - 信息
+     * @param onPositiveButtonClickListener - 肯定按钮监听
+     * @param positiveText                  - 肯定按钮信息
+     * @param onNegativeButtonClickListener - 否定按钮监听
+     * @param negativeText                  - 否定按钮信息
+     */
+    protected fun showAlertDialog(title: String?, message: String?,
+                                  onPositiveButtonClickListener: DialogInterface.OnClickListener?,
+                                  positiveText: String,
+                                  onNegativeButtonClickListener: DialogInterface.OnClickListener?,
+                                  negativeText: String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton(positiveText, onPositiveButtonClickListener)
+        builder.setNegativeButton(negativeText, onNegativeButtonClickListener)
+        mAlertDialog = builder.show()
+    }
 
 }

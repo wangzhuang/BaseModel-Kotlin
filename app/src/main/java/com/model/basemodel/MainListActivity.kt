@@ -1,5 +1,9 @@
 package com.model.basemodel
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.support.annotation.NonNull
+import android.support.v4.app.ActivityCompat
 import android.widget.ImageView
 import com.alibaba.fastjson.JSON
 import com.bumptech.glide.Glide
@@ -8,6 +12,7 @@ import com.model.basemodel.http.demoApi.userInfo
 import com.orhanobut.logger.Logger
 import com.yimai.app.ui.base.BaseListActivity
 import net.idik.lib.slimadapter.SlimAdapter
+import org.jetbrains.anko.toast
 
 /**
  * BaseModel
@@ -33,6 +38,7 @@ class MainListActivity : BaseListActivity() {
     override val layoutResId: Int = R.layout.common_list
 
     override fun initView() {
+        requestCallPhone()
     }
 
     override fun initData() {
@@ -58,7 +64,35 @@ class MainListActivity : BaseListActivity() {
 
     override fun onLoadMore() {
     }
+    private val CALL_PHONE_REQUEST_CODE = 0x0001
 
+    private fun requestCallPhone() {
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            //没有权限则动态申请
+            requestPermission(Manifest.permission.CAMERA,getString(R.string.internal_storage_permissions),CALL_PHONE_REQUEST_CODE);
+        } else {
+            //已经有权限直接打电话
+            toast("有权限")
+        }
+    }
+
+    //获取用户的反馈 是否授予了权限
+    override fun onRequestPermissionsResult(requestCode: Int, @NonNull permissions: Array<String>, @NonNull grantResults: IntArray) {
+        if (requestCode == CALL_PHONE_REQUEST_CODE) {
+            if (grantResults != null && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 用户授权了
+                toast("用户授权了")
+            } else {
+                //没有授权提示用户
+                toast("没有授权")
+            }
+        }
+    }
     override fun onEvent(event: Any) {
         super.onEvent(event)
         when (event) {
