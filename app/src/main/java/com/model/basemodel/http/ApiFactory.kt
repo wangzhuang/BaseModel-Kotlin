@@ -1,0 +1,20 @@
+package com.model.basemodel.http
+
+import com.model.basemodel.http.demoApi.DemoAPI
+
+/**
+ * BaseModel
+ * Created by WZ.
+ */
+object ApiFactory {
+
+    private var demoAPI: DemoAPI? = null
+
+    fun getDemoAPI(): DemoAPI? {
+        if (demoAPI == null) {
+            demoAPI = RetrofitClient.retrofit.create<DemoAPI>(DemoAPI::class.java)
+        }
+        return demoAPI
+    }
+
+}
