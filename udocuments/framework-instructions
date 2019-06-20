@@ -1,0 +1,40 @@
+开发框架使用简要：
+此框架基于Retrofit+OKHttp+EventBus搭建，开发语言主要是Kotlin、Java.
+1、包功能说明
+app  存放自定义Application
+constant    存放一下常量
+http     网络请求
+apiconfig 网络url、header配置
+beans    实体类
+xxApi    各个模块网络请求Api
+util     工具类
+ui      界面相关
+activity  存放activity类
+adapter   存放适配器
+dialog    存放Dialog类
+fragments 存放Fragment类
+widget    存放自定义控件类
+
+2、重要类说明
+HttpConfig             网络请求BaseUrl测试环境和发布环境配置类
+HttpHeaderConfig       Http请求Header配置类
+ApiFactory             Api网络请求工厂类
+RetrofitClient         Retrofit配置类
+OKHttpFactory          OKHttp工厂类
+HttpLoggerInterceptor  记录请求和响应信息的OkHttp拦截器
+BaseActivity            Activity基类
+BaseListActivity        带List Activity基类
+BaseFragment            Fragment基类
+BaseListFragment        带List Fragment基类
+BaseDialog              普通Dialog基类
+BaseBottomDialog        底部显示Dialog基类
+ProgressBarDialog       网络请求加载进度Dialog
+
+3.工具类说明
+动态权限使用见TestActivity里使用Demo
+Kotlin开发框架使用Anko框架
+适配器三方：
+  //adapter
+    implementation 'net.idik:slimadapter:2.1.1'
+ //添加底部dialog
+    implementation 'me.shaohui:bottomdialog:1.1.9'
