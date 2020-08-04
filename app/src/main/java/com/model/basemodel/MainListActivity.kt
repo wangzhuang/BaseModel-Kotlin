@@ -4,11 +4,8 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.support.annotation.NonNull
 import android.support.v4.app.ActivityCompat
-import android.widget.ImageView
 import com.alibaba.fastjson.JSON
-import com.bumptech.glide.Glide
 import com.model.basemodel.http.apiconfig.model
-import com.model.basemodel.http.demoApi.userInfo
 import com.orhanobut.logger.Logger
 import com.yimai.app.ui.base.BaseListActivity
 import net.idik.lib.slimadapter.SlimAdapter

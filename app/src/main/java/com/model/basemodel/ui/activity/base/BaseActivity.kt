@@ -4,19 +4,18 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.WindowManager
 import android.widget.TextView
 import com.jaeger.library.StatusBarUtil
 import com.model.basemodel.R
 import com.model.basemodel.ui.dialog.ProgressBarDialog
 import com.model.basemodel.util.PermissionHelper
-import de.greenrobot.event.EventBus
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.AnkoLogger
 
 /**
@@ -59,6 +58,7 @@ abstract class BaseActivity : IBase, AppCompatActivity(), AnkoLogger {
     abstract override fun initView()
     abstract override fun initData()
 
+    @Subscribe(threadMode = ThreadMode.POSTING)
     open fun onEvent(event: Any) {
 
     }

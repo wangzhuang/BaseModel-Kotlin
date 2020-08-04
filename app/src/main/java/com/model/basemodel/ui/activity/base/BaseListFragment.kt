@@ -1,9 +1,5 @@
 package com.yimai.app.ui.base
 
-import `in`.srain.cube.views.ptr.PtrClassicFrameLayout
-import `in`.srain.cube.views.ptr.PtrDefaultHandler2
-import `in`.srain.cube.views.ptr.PtrFrameLayout
-import `in`.srain.cube.views.ptr.header.StoreHouseHeader
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +8,10 @@ import android.view.ViewGroup
 import com.model.basemodel.R
 import com.model.basemodel.ui.activity.base.IBase
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import de.greenrobot.event.EventBus
+
 import kotlinx.android.synthetic.main.common_list.*
-import org.jetbrains.anko.sdk25.coroutines.onClick
-import org.jetbrains.anko.support.v4.dip
+import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 /**
  * BaseModel

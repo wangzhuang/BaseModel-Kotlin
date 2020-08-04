@@ -1,12 +1,7 @@
 package com.yimai.app.ui.base
 
-import `in`.srain.cube.views.ptr.PtrClassicFrameLayout
-import `in`.srain.cube.views.ptr.PtrDefaultHandler2
-import `in`.srain.cube.views.ptr.PtrFrameLayout
-import `in`.srain.cube.views.ptr.header.StoreHouseHeader
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
@@ -14,22 +9,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.view.WindowManager
 import android.widget.TextView
-import android.widget.Toast
 import com.jaeger.library.StatusBarUtil
 import com.model.basemodel.R
 import com.model.basemodel.ui.activity.base.IBase
 import com.model.basemodel.util.PermissionHelper
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
-import com.scwang.smartrefresh.layout.api.RefreshLayout
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener
-import de.greenrobot.event.EventBus
 import kotlinx.android.synthetic.main.common_list.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.dip
-import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk27.coroutines.onClick
 
 /**
  * BaseModel
@@ -110,7 +101,7 @@ abstract class BaseListActivity : IBase, AppCompatActivity(), AnkoLogger {
     abstract override fun initData()
     abstract fun onRefresh()
     abstract fun onLoadMore()
-
+    @Subscribe(threadMode = ThreadMode.POSTING)
     open fun onEvent(event: Any) {
 
     }

@@ -1,6 +1,8 @@
 package com.model.basemodel.http
 
-import de.greenrobot.event.EventBus
+
+
+import org.greenrobot.eventbus.EventBus
 import retrofit2.Response
 
 /**

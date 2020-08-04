@@ -17,9 +17,6 @@ class TestActivity : BaseActivity() {
     override val layoutResId: Int = R.layout.activity_main
 
     override fun initView() {
-
-
-
     }
 
     override fun initData() {
