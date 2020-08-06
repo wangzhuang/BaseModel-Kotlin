@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.support.annotation.NonNull
 import android.support.v4.app.ActivityCompat
+import android.util.Log
 import com.alibaba.fastjson.JSON
 import com.model.basemodel.http.apiconfig.model
+import com.model.basemodel.http.demoApi.userInfo
 import com.orhanobut.logger.Logger
 import com.yimai.app.ui.base.BaseListActivity
 import net.idik.lib.slimadapter.SlimAdapter
@@ -36,6 +38,7 @@ class MainListActivity : BaseListActivity() {
 
     override fun initView() {
         requestCallPhone()
+        userInfo()
     }
 
     override fun initData() {
@@ -93,6 +96,9 @@ class MainListActivity : BaseListActivity() {
     override fun onEvent(event: Any) {
         super.onEvent(event)
         when (event) {
+            is String ->{
+                Log.i("=====",event.toString())
+            }
             is model -> {
                 Logger.json(JSON.toJSONString(event))
 

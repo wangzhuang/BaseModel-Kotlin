@@ -82,10 +82,10 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0-RC3'
 
     //okhttp
-    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
-    implementation 'com.squareup.okhttp:okhttp-urlconnection:1.6.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.8.0'
+    implementation 'com.squareup.okhttp:okhttp-urlconnection:2.7.5'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     //adapter
     implementation 'net.idik:slimadapter:2.1.1'

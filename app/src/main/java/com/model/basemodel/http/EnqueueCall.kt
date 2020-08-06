@@ -17,6 +17,6 @@ fun <T> EnqueueCallback(): Callback<T> = object : Callback<T> {
     }
 
     override fun onFailure(p0: Call<T>?, p1: Throwable?) {
-        Logger.e(p0?.request()?.url()?.toString() + "\n" + p1?.message + "\n" + p0?.request()?.body())
+        Logger.e(p0?.request()?.url?.toString() + "\n" + p1?.message + "\n" + p0?.request()?.body)
     }
 }

@@ -2,7 +2,6 @@ package com.model.basemodel.http.demoApi
 
 import com.model.basemodel.http.ApiFactory
 import com.model.basemodel.http.EnqueueCallback
-import com.model.basemodel.http.apiconfig.model
 
 /**
  * BaseModel
@@ -11,5 +10,5 @@ import com.model.basemodel.http.apiconfig.model
 fun userInfo() {
     ApiFactory.getDemoAPI()
             ?.userInfo()
-            ?.enqueue(EnqueueCallback<model>())
+            ?.enqueue(EnqueueCallback<String>())
 }
