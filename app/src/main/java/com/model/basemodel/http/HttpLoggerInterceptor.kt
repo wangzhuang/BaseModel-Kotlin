@@ -1,11 +1,14 @@
 package com.model.basemodel.http
 
+import com.squareup.okhttp.internal.http.StatusLine.HTTP_CONTINUE
 import okhttp3.*
 import okhttp3.internal.platform.Platform
 import okhttp3.internal.platform.Platform.Companion.INFO
 import okio.Buffer
 import java.io.EOFException
 import java.io.IOException
+import java.net.HttpURLConnection.HTTP_NOT_MODIFIED
+import java.net.HttpURLConnection.HTTP_NO_CONTENT
 import java.nio.charset.Charset
 import java.nio.charset.UnsupportedCharsetException
 import java.util.concurrent.TimeUnit
@@ -207,7 +210,7 @@ class HttpLoggerInterceptor @JvmOverloads constructor(private val logger: Logger
                 logger.log(headers.name(i) + ": " + headers.value(i))
                 i++
             }
-            if (!logBody){
+            if (!logBody||!hasBody(request,response)){//||!HttpHeaders.hasBody(response)
                 logger.log("--> END " + request.method)
             }else if (bodyEncoded(response.headers)) {
                 logger.log("<-- END HTTP (encoded body omitted)")
@@ -251,12 +254,37 @@ class HttpLoggerInterceptor @JvmOverloads constructor(private val logger: Logger
 
         return response
     }
+    private fun hasBody(
+        request: Request,
+        response: Response
+    ): Boolean { // HEAD requests never yield a body regardless of the response headers.
+        if (response.request.method == "HEAD") {
+            return false
+        }
+        val responseCode = response.code
+        if ((responseCode < HTTP_CONTINUE || responseCode >= 200)
+            && responseCode != HTTP_NO_CONTENT && responseCode != HTTP_NOT_MODIFIED
+        ) {
+            return true
+        }
 
+        if (stringToLong(request.headers.get("Content-Length")) != -1L
+            || "chunked".equals(response.header("Transfer-Encoding"),true)) {
+            return true
+        }
+        return false
+    }
     private fun bodyEncoded(headers: Headers): Boolean {
         val contentEncoding = headers.get("Content-Encoding")
         return contentEncoding != null && !contentEncoding.equals("identity", ignoreCase = true)
     }
-
+    private fun stringToLong(s: String?): Long {
+        return if (s == null) -1 else try {
+            s.toLong()
+        } catch (e: NumberFormatException) {
+            -1
+        } as Long
+    }
     companion object {
         private val UTF8 = Charset.forName("UTF-8")
 
