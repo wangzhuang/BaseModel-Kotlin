@@ -29,10 +29,70 @@ BaseListFragment        带List Fragment基类
 BaseDialog              普通Dialog基类
 BaseBottomDialog        底部显示Dialog基类
 ProgressBarDialog       网络请求加载进度Dialog
+等
+3、封装的重要功能说明
+3、1 网络的配置和使用
+1）HttpConfig类配置网络环境BaseUrl
+2）HttpHeaderConfig配置所需的Header
+3）DemoAPI（也可以自定义功能模块名字）接口中定义请求方式（如Get，Post等）、url详细地址、所需参数、header、返回数据接收的数据类
+例：@GET("posts")
+    fun userInfo(@HeaderMap map: Map<String, String> = loginHeader()): Call<ArrayList<TestBase>>
+4）在ApiFactory注册DemoApi获得api实例。
+5）在DemoApiUtils顶层函数中写具体DemoApi请求方法的实现
+3、2 请求数据返回结果处理（EventBus事件总线）
+3.2.1 请求网络方法与结果返回同一个Activity（其他页面的onEvent方法不接收此网络请求结果）
+object HttpCommonUtil {
+    fun <T> putMessageToActivity(context: Context,p1: Response<T>?,isNormal:Boolean) {
+        if (p1?.code() == 200) {
+            when (p1.headers()?.get("error-code").isNullOrEmpty()) {
+                true -> {
+                    if (isNormal) {
+                        XEventBus.getDefault()
+                            .post(ResponseBase(p1.body(), object : IXEventSubsciber {
+                                override fun getId(): Any {
+                                    return context
+                                }
 
-3.工具类说明
-动态权限使用见TestActivity里使用Demo
-Kotlin开发框架使用Anko框架
+                            }))
+                    } else {
+                        EventBus.getDefault().post(p1.body()?: "")
+                    }
+                }
+                false -> {
+                    return
+                }
+            }
+        } else {
+            //错误处理
+        }
+
+    }
+
+}
+此方式isNormal可不传参数，默认true。ResponseBase将网络请求结果封装了一层。
+主要通过ResponseBase确认数据传回的页面。
+需要接受的页面需要实现IXEventSubsciber接口并且重写getId方法。
+ //接收者需要实现同样的接口
+    override fun getId(): Any? {
+        return this
+    }
+详细的例子可以看MainListActivity中的Demo
+
+3.2.2 请求网络方法与结果返回不限制页面
+和普通EventBus使用一样。只是要将DemoApiUtils中的方法传isNomal为false
+
+4.使用的三方依赖说明
+
+4、1 Kotlin开发框架使用Anko框架
+4、2 事件总线EventBus
+ implementation 'org.greenrobot:eventbus:3.2.0'
+4、3 网络请求OkHttp
+4、4 网络封装retrofit
+4、5 数据Json解析Gson
+4、6 反应式编程rxkotlin 、rxjava
+4、7 rxbinding2：RxBinding 能够把 Android 平台的兼容包内的 UI 控件变为 Observaber 对象.
+可以把 UI 控件的事件当作 RxJava 中的数据流来使用.
+4、8 图片处理glide
 适配器三方：
   //adapter
     implementation 'net.idik:slimadapter:2.1.1'
