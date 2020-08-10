@@ -2,7 +2,11 @@ package com.model.basemodel.http
 
 
 
+import android.content.Context
+import com.model.basemodel.beans.ResponseBase
 import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.IXEventSubsciber
+import org.greenrobot.eventbus.XEventBus
 import retrofit2.Response
 
 /**
@@ -10,11 +14,21 @@ import retrofit2.Response
  * Created by WZ.
  */
 object HttpCommonUtil {
-    fun <T> putMessageToActivity(p1: Response<T>?) {
+    fun <T> putMessageToActivity(context: Context,p1: Response<T>?,isNormal:Boolean) {
         if (p1?.code() == 200) {
             when (p1.headers()?.get("error-code").isNullOrEmpty()) {
                 true -> {
-                    EventBus.getDefault().post(p1.body() ?: "")
+                    if (isNormal) {
+                        XEventBus.getDefault()
+                            .post(ResponseBase(p1.body(), object : IXEventSubsciber {
+                                override fun getId(): Any {
+                                    return context
+                                }
+
+                            }))
+                    } else {
+                        EventBus.getDefault().post(p1.body()?: "")
+                    }
                 }
                 false -> {
                     return

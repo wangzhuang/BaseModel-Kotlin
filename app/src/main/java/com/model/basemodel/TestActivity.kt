@@ -1,6 +1,12 @@
 package com.model.basemodel
 
+import android.util.Log
+import com.model.basemodel.beans.ResponseBase
+import com.model.basemodel.beans.Test
+import com.model.basemodel.beans.Test2
+import com.model.basemodel.beans.response.TestBase
 import com.model.basemodel.ui.activity.base.BaseActivity
+import org.greenrobot.eventbus.IXEventSubsciber
 import org.jetbrains.anko.intentFor
 
 
@@ -8,7 +14,7 @@ import org.jetbrains.anko.intentFor
  * BaseModel
  * WZ
  */
-class TestActivity : BaseActivity() {
+class TestActivity : BaseActivity() , IXEventSubsciber {
     override fun getIntentMessageData() {
 
     }
@@ -22,4 +28,35 @@ class TestActivity : BaseActivity() {
     override fun initData() {
         startActivity(intentFor<MainListActivity>())
     }
+
+    override fun onEvent(event: Any) {
+        super.onEvent(event)
+        when(event){
+            is Test ->{
+                Log.i("--------========","TestActivity recend Test")
+            }
+            is Test2 ->{
+                Log.i("-----------========","MainListActivity recend Test2")
+            }
+            is ResponseBase<*> ->{
+                when(event.data){
+                    is ArrayList<*> ->{
+                        var array:ArrayList<TestBase> = event.data as ArrayList<TestBase>
+                            Log.i("=======TestActivity==", array[0].title)
+                        }
+                    }
+                }
+            is ArrayList<*> ->{
+                var array:ArrayList<TestBase> = event as ArrayList<TestBase>
+                Log.i("=======TestActivity==", array[0].title)
+            }
+            }
+        }
+
+
+
+    override fun getId(): Any {
+        return this
+    }
+
 }

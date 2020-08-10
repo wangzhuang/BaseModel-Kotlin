@@ -1,5 +1,6 @@
 package com.model.basemodel.http
 
+import android.content.Context
 import com.orhanobut.logger.Logger
 import retrofit2.Call
 import retrofit2.Callback
@@ -9,10 +10,10 @@ import retrofit2.Response
  * BaseModel
  * Created by WZ.
  */
-fun <T> EnqueueCallback(): Callback<T> = object : Callback<T> {
+fun <T> EnqueueCallback(context: Context,isNormal:Boolean = true): Callback<T> = object : Callback<T> {
     override fun onResponse(p0: Call<T>?, p1: Response<T>?) {
         p1.let {
-            HttpCommonUtil.putMessageToActivity(p1)
+            HttpCommonUtil.putMessageToActivity(context,p1,isNormal)
         }
     }
 

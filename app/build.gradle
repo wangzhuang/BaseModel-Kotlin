@@ -128,5 +128,5 @@ dependencies {
 
     //fastjson
     implementation 'com.alibaba:fastjson:1.2.37'
-
+    implementation project(path: ':library')
 }

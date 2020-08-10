@@ -4,19 +4,29 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.support.annotation.NonNull
 import android.support.v4.app.ActivityCompat
+import android.util.Log
 import com.alibaba.fastjson.JSON
+import com.model.basemodel.beans.ResponseBase
+import com.model.basemodel.beans.Test
+import com.model.basemodel.beans.Test2
+import com.model.basemodel.beans.response.TestBase
 import com.model.basemodel.http.apiconfig.model
 import com.model.basemodel.http.demoApi.userInfo
+import com.model.basemodel.util.clickThrottleFirst
 import com.orhanobut.logger.Logger
 import com.yimai.app.ui.base.BaseListActivity
+import kotlinx.android.synthetic.main.common_list.*
 import net.idik.lib.slimadapter.SlimAdapter
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.IXEventSubsciber
+import org.greenrobot.eventbus.XEventBus
 import org.jetbrains.anko.toast
 
 /**
  * BaseModel
  * Created by WZ
  */
-class MainListActivity : BaseListActivity() {
+class MainListActivity : BaseListActivity() , IXEventSubsciber {
     override fun getIntentMessageData() {
     }
 
@@ -37,11 +47,19 @@ class MainListActivity : BaseListActivity() {
 
     override fun initView() {
         requestCallPhone()
-        userInfo()
+        clickThrottleFirst(button){
+            XEventBus.getDefault().post(Test(object : IXEventSubsciber {
+                override fun getId(): MainListActivity {
+                    return this@MainListActivity
+                }
+            }))
+            EventBus.getDefault().post(Test2())
+        }
+
     }
 
     override fun initData() {
-//        userInfo()
+        userInfo(this,false)
         addTestData()
     }
 
@@ -104,7 +122,29 @@ class MainListActivity : BaseListActivity() {
                 adapter.updateData(list).notifyDataSetChanged()
                 refreshComplete()
             }
+            is ResponseBase<*> ->{
+                when(event.data){
+                    is ArrayList<*> ->{
+                        var array:ArrayList<TestBase> = event.data as ArrayList<TestBase>
+                        Log.i("========Main=", array[0].title)
+                    }
+                }
+            }
+            is Test ->{
+                Log.i("-----------========","MainListActivity recend Test")
+            }
+            is Test2 ->{
+                Log.i("-----------========","MainListActivity recend Test2")
+            }
+            is ArrayList<*> ->{
+                var array:ArrayList<TestBase> = event as ArrayList<TestBase>
+                Log.i("========Main=", array[0].title)
+            }
         }
+    }
+    //接收者需要实现同样的接口
+    override fun getId(): Any? {
+        return this
     }
 
 

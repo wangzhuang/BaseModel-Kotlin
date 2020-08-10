@@ -16,6 +16,7 @@ import com.model.basemodel.util.PermissionHelper
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.greenrobot.eventbus.XEventBus
 import org.jetbrains.anko.AnkoLogger
 
 /**
@@ -36,6 +37,9 @@ abstract class BaseActivity : IBase, AppCompatActivity(), AnkoLogger {
 
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
+        }
+        if ( !XEventBus.getDefault().isRegistered(this)) {
+            XEventBus.getDefault().register(this)
         }
         StatusBarUtil.setColor(this@BaseActivity, ContextCompat.getColor(this@BaseActivity, R.color.colorPrimary))
         getIntentMessageData()
@@ -74,6 +78,7 @@ abstract class BaseActivity : IBase, AppCompatActivity(), AnkoLogger {
 
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
+        XEventBus.getDefault().unregister(this);
         super.onDestroy()
     }
 

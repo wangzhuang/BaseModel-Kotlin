@@ -1,5 +1,6 @@
 package com.model.basemodel.http.demoApi
 
+import com.model.basemodel.beans.response.TestBase
 import com.model.basemodel.http.apiconfig.HttpHeaderConfig.loginHeader
 import retrofit2.Call
 import retrofit2.http.GET
@@ -13,6 +14,6 @@ import retrofit2.http.HeaderMap
 interface DemoAPI {
 
     @GET("posts")
-    fun userInfo(@HeaderMap map: Map<String, String> = loginHeader()): Call<String>
+    fun userInfo(@HeaderMap map: Map<String, String> = loginHeader()): Call<ArrayList<TestBase>>
 
 }

@@ -23,6 +23,12 @@
                 android:divider="#f5f5f5"
                 android:listSelector="#00000000"
                 />
+
+            <Button
+                    android:id="@+id/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Button" />
             <!--<include layout="@layout/_loading_layout_empty"-->
             <!--android:id="@+id/empty"/>-->
         </FrameLayout>
