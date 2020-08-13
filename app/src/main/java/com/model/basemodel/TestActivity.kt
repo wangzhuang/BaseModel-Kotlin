@@ -5,6 +5,9 @@ import com.model.basemodel.beans.ResponseBase
 import com.model.basemodel.beans.Test
 import com.model.basemodel.beans.Test2
 import com.model.basemodel.beans.response.TestBase
+import com.model.basemodel.ui.activity.BrowserActivity
+import com.model.basemodel.ui.activity.BrowserActivity.PARAM_MODE
+import com.model.basemodel.ui.activity.BrowserActivity.PARAM_URL
 import com.model.basemodel.ui.activity.base.BaseActivity
 import org.greenrobot.eventbus.IXEventSubsciber
 import org.jetbrains.anko.intentFor
@@ -26,7 +29,7 @@ class TestActivity : BaseActivity() , IXEventSubsciber {
     }
 
     override fun initData() {
-        startActivity(intentFor<MainListActivity>())
+        startActivity(intentFor<BrowserActivity>(PARAM_MODE to 1,PARAM_URL to "https://github.com/Justson/AgentWeb"))
     }
 
     override fun onEvent(event: Any) {

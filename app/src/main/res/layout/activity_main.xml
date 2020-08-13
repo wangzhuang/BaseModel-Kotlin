@@ -12,7 +12,13 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/rd_group"
             android:layout_marginTop="22dp"
-            android:background="@color/bg_gray"></FrameLayout>
+            android:layout_marginBottom="4dp"
+            android:background="@color/bg_gray">
+        <com.model.basemodel.custom_view_study.CustomView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            />
+    </FrameLayout>
 
     <RadioGroup
             android:id="@+id/rd_group"
