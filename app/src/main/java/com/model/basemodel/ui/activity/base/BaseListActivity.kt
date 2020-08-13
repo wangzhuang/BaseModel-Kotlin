@@ -3,18 +3,21 @@ package com.yimai.app.ui.base
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
-import com.jaeger.library.StatusBarUtil
+import com.bluejamesbond.text.Console
+import com.gyf.immersionbar.ImmersionBar
 import com.model.basemodel.R
 import com.model.basemodel.ui.activity.base.IBase
 import com.model.basemodel.util.PermissionHelper
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
+import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.common_list.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -27,22 +30,84 @@ import org.jetbrains.anko.sdk27.coroutines.onClick
  * Created by WZ.
  */
 abstract class BaseListActivity : IBase, AppCompatActivity(), AnkoLogger {
-
+    private var statusBarHeight = 0
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(layoutResId)
+        setContentView(R.layout.activity_base)
+        setView(layoutResId,isStatusBarTransient,-1)
         initToolBar()
         initListViewFrame()
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
         }
-        StatusBarUtil.setColor(this@BaseListActivity, ContextCompat.getColor(this@BaseListActivity, R.color.colorPrimary))
         getIntentMessageData()
         initView()
         initData()
         initErrorLayout()
     }
+    private fun setView(
+        layoutId: Int,
+        isStatusBarCover: Boolean,
+        offsetViewId: Int
+    ) {
+        llContentView.removeAllViews()
+        val childView: View = LayoutInflater.from(this).inflate(layoutId, null)
+        statusBarHeight = getStatusBarHeight()
+        if (!isStatusBarCover) { //状态栏不透明显示时，需要将整体布局下移
+            childView.setPadding(
+                childView.paddingLeft,
+                childView.paddingTop + statusBarHeight,
+                childView.paddingRight,
+                childView.paddingBottom
+            )
+            ImmersionBar.with(this).statusBarDarkFont(false, 1.0f).statusBarColor(statusBarColor)
+                .init()
+        } else { //状态栏透明覆盖时，需要将标题栏下移
+            if (offsetViewId > 0) {
+                val offsetView =
+                    childView.findViewById<View>(offsetViewId)
+                if (offsetView != null) {
+                    offsetView.setPadding(
+                        offsetView.paddingLeft,
+                        offsetView.paddingTop + statusBarHeight,
+                        offsetView.paddingRight,
+                        offsetView.paddingBottom
+                    )
+                    Console.log("setView", "offsetView.getPaddingTop=" + offsetView.paddingTop)
+                }
+            }
+            //            ImmersionBar.with(this).statusBarDarkFont(false, 0.0f).statusBarColor(android.R.color.transparent).init();
+            ImmersionBar.with(this).statusBarDarkFont(true, 0.0f)
+                .autoStatusBarDarkModeEnable(true, 0.2f).init()
+        }
+        llContentView.addView(
+            childView,
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+    }
 
+    protected open fun getStatusBarHeight(): Int {
+        var statusBarHeight = -1
+        //获取status_bar_height资源的ID
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if (resourceId > 0) { //根据资源ID获取响应的尺寸值
+            statusBarHeight = resources.getDimensionPixelSize(resourceId)
+        } else {
+            try {
+                val clazz =
+                    Class.forName("com.android.internal.R\$dimen")
+                val `object` = clazz.newInstance()
+                val height =
+                    clazz.getField("status_bar_height")[`object`].toString().toInt()
+                statusBarHeight = resources.getDimensionPixelSize(height)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+        //        log("getStatusBarHeight", "" + statusBarHeight);
+        return statusBarHeight
+    }
     fun initToolBar() {
         val toolbar = findViewById(R.id.toolbar) as? Toolbar
         toolbar?.setNavigationOnClickListener {
@@ -55,14 +120,12 @@ abstract class BaseListActivity : IBase, AppCompatActivity(), AnkoLogger {
     var mRefreshLayout: SmartRefreshLayout? = null
     var mRecyclerView: RecyclerView? = null
 
-    fun initListViewFrame() {
+    private fun initListViewFrame() {
         mRecyclerView = findViewById(R.id.recyler_view)
-                as RecyclerView
         mRecyclerView?.apply {
             layoutManager = LinearLayoutManager(this@BaseListActivity, LinearLayoutManager.VERTICAL, false)
         }
         mRefreshLayout = findViewById(R.id.refreshLayout)
-                as SmartRefreshLayout
         mRefreshLayout?.setOnRefreshListener { refreshLayout ->
             refreshLayout.layout.postDelayed({
                 onRefresh()
@@ -88,7 +151,7 @@ abstract class BaseListActivity : IBase, AppCompatActivity(), AnkoLogger {
     }
 
     //设置网络错误时，点击重新请求
-    fun initErrorLayout() {
+    private fun initErrorLayout() {
         error_layout.onClick {
             onRefresh()
         }
@@ -99,6 +162,8 @@ abstract class BaseListActivity : IBase, AppCompatActivity(), AnkoLogger {
     abstract fun getIntentMessageData()
     abstract override fun initView()
     abstract override fun initData()
+    abstract val isStatusBarTransient: Boolean
+    open var statusBarColor: Int = R.color.bg_default
     abstract fun onRefresh()
     abstract fun onLoadMore()
     @Subscribe(threadMode = ThreadMode.POSTING)

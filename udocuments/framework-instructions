@@ -98,3 +98,17 @@ object HttpCommonUtil {
     implementation 'net.idik:slimadapter:2.1.1'
  //添加底部dialog
     implementation 'me.shaohui:bottomdialog:1.1.9'
+
+5、工具类说明
+AppUtils 获取app信息（如名字、版本号）
+ConvertUtils 转换相关工具类
+EncodeUtils 编码解码相关工具类
+KeyboardUtils 键盘相关工具类
+NetUtils 网络相关辅助类
+PermissionUtils 动态权限处理
+RegexUtils 正则相关工具类
+RxUtil rxbinding2点击事件处理类（如防止短时间多次点击）
+ScreenUtils 屏幕相关辅助类
+SDCardUtils SD卡相关的辅助类
+SizeUtils 尺寸相关工具类
+SPUtils SharedPreferences封装类

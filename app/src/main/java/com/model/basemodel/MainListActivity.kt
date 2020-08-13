@@ -29,7 +29,8 @@ import org.jetbrains.anko.toast
 class MainListActivity : BaseListActivity() , IXEventSubsciber {
     override fun getIntentMessageData() {
     }
-
+    override val layoutResId: Int = R.layout.common_list
+    override val isStatusBarTransient: Boolean = true
     private val adapter by lazy {
         SlimAdapter.create().register<model>(R.layout.view_demo) {
             data, injector ->
@@ -43,7 +44,6 @@ class MainListActivity : BaseListActivity() , IXEventSubsciber {
     override val title: String by lazy {
         "列表"
     }
-    override val layoutResId: Int = R.layout.common_list
 
     override fun initView() {
         requestCallPhone()
@@ -62,6 +62,8 @@ class MainListActivity : BaseListActivity() , IXEventSubsciber {
         userInfo(this,false)
         addTestData()
     }
+
+
 
     private fun addTestData() {
         var Model: model? = null

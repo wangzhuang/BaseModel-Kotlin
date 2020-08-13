@@ -12,6 +12,7 @@ class MainActivity : BaseActivity() {
         ""
     }
     override val layoutResId: Int = R.layout.activity_main
+    override val isStatusBarTransient: Boolean = true
 
     override fun getIntentMessageData() {
     }

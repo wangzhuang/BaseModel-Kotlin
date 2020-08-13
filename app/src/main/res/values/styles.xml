@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -7,6 +7,27 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/text_normal</item>
     </style>
+
+    <style name="activityAnimation" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/anim_translate_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_translate_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/anim_translate_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/anim_translate_out</item>
+    </style>
+    <!--parent="AppTheme"-->
+    <style name="NoStatusStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 设置activity切换动画 -->
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">false
+        </item> <!--状态栏为透明,如果设置为false，则没有黑色条盖住，见下图对比-->
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item> <!--导航栏为透明-->
+        <item name="android:windowDisablePreview">true</item>
+        <item name="colorAccent">#D9E3F4</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
     <style name="tab_menu_item">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -23,4 +44,5 @@
     <style name="activityTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
 </resources>

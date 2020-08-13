@@ -21,7 +21,7 @@ class TestActivity : BaseActivity() , IXEventSubsciber {
 
     override val title: String = "测试activity"
     override val layoutResId: Int = R.layout.activity_main
-
+    override val isStatusBarTransient: Boolean = true
     override fun initView() {
     }
 

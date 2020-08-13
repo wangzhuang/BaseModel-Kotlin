@@ -15,7 +15,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:networkSecurityConfig="@xml/network_config"
-            android:theme="@style/AppTheme">
+            android:theme="@style/NoStatusStyle">
         <activity android:name=".TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
